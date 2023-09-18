@@ -1,0 +1,193 @@
+version: "3.8"
+services:
+  mysql_database:
+    image: mysql:8.0
+    container_name: mysql-database-food-ordering
+    mem_limit: 700m
+    networks:
+      - food-ordering-network
+    ports:
+      - 3307:3306
+    restart: always
+    environment:
+      MYSQL_DATABASE: microservicesdockerk8sfoodordering
+      MYSQL_USER: Kirti
+      MYSQL_PASSWORD: Kirti@02021997
+      MYSQL_ROOT_PASSWORD: Kirti@02021997
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    mem_limit: 700m
+    networks:
+      - food-ordering-network
+    ports:
+      - 9411:9411
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    container_name: keycloak
+    command: ["start-dev", "--import-realm"]
+    mem_limit: 700m
+    networks:
+      - food-ordering-network
+    ports:
+      - 1030:6369
+    restart: always
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+  microservices-food-ordering-eureka-server:
+    image: kirtishekharpandey/microservices-food-ordering-eureka-server:latest
+    container_name: microservices-food-ordering-eureka-server
+    mem_limit: 700m
+    networks:
+      - food-ordering-network
+    ports:
+      - 8761:8761
+    restart: unless-stopped
+    environment:
+      SPRING_APPLICATION_NAME: microservices-food-ordering-eureka-server-project
+      SPRING_PROFILES_ACTIVE: default
+
+  microservices-food-ordering-configuration-server:
+    image: kirtishekharpandey/microservices-food-ordering-configuration-server:latest
+    container_name: microservices-food-ordering-configuration-server
+    mem_limit: 700m
+    ports:
+      - 9966:9966
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
+    depends_on:
+      - microservices-food-ordering-eureka-server
+    environment:
+      SPRING_APPLICATION_NAME: microservices-food-ordering-configuration-server-project
+      SPRING_PROFILES_ACTIVE: git
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microservices-food-ordering-eureka-server:8761/eureka
+
+  microservices-food-ordering-restaurant-service:
+    image: kirtishekharpandey/microservices-food-ordering-restaurant-service:latest
+    container_name: microservices-food-ordering-restaurant-service
+    mem_limit: 700m
+    ports:
+      - 8249:8249
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
+    depends_on:
+      - mysql_database
+      - zipkin
+      - microservices-food-ordering-configuration-server
+      - microservices-food-ordering-eureka-server
+    environment:
+      SPRING_APPLICATION_NAME: microservices-food-ordering-restaurant-service-project
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: optional:configserver:http://microservices-food-ordering-configuration-server:9966/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_database:3306/microservicesdockerk8sfoodordering?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: Kirti
+      SPRING_DATASOURCE_PASSWORD: Kirti@02021997
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microservices-food-ordering-eureka-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+  microservices-food-ordering-payment-service:
+    image: kirtishekharpandey/microservices-food-ordering-payment-service:latest
+    container_name: microservices-food-ordering-payment-service
+    mem_limit: 700m
+    ports:
+      - 8247:8247
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
+    depends_on:
+      - mysql_database
+      - zipkin
+      - microservices-food-ordering-configuration-server
+      - microservices-food-ordering-eureka-server
+    environment:
+      SPRING_APPLICATION_NAME: microservices-food-ordering-payment-service-project
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: optional:configserver:http://microservices-food-ordering-configuration-server:9966/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_database:3306/microservicesdockerk8sfoodordering?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: Kirti
+      SPRING_DATASOURCE_PASSWORD: Kirti@02021997
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microservices-food-ordering-eureka-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+  microservices-food-ordering-order-service:
+    image: kirtishekharpandey/microservices-food-ordering-order-service:latest
+    container_name: microservices-food-ordering-order-service
+    mem_limit: 700m
+    ports:
+      - 8245:8245
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
+    depends_on:
+      - mysql_database
+      - zipkin
+      - microservices-food-ordering-configuration-server
+      - microservices-food-ordering-eureka-server
+    environment:
+      SPRING_APPLICATION_NAME: microservices-food-ordering-order-service-projects
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: optional:configserver:http://microservices-food-ordering-configuration-server:9966/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_database:3306/microservicesdockerk8sfoodordering?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: Kirti
+      SPRING_DATASOURCE_PASSWORD: Kirti@02021997
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microservices-food-ordering-eureka-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+  microservices-food-ordering-inventory-service:
+    image: kirtishekharpandey/microservices-food-ordering-inventory-service:latest
+    container_name: microservices-food-ordering-inventory-service
+    mem_limit: 700m
+    ports:
+      - 8243:8243
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
+    depends_on:
+      - mysql_database
+      - zipkin
+      - microservices-food-ordering-configuration-server
+      - microservices-food-ordering-eureka-server
+    environment:
+      SPRING_APPLICATION_NAME: microservices-food-ordering-inventory-service-projects
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: optional:configserver:http://microservices-food-ordering-configuration-server:9966/
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_database:3306/microservicesdockerk8sfoodordering?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: Kirti
+      SPRING_DATASOURCE_PASSWORD: Kirti@02021997
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microservices-food-ordering-eureka-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+  microservices-food-ordering-cloud-gateway-api:
+    image: kirtishekharpandey/microservices-food-ordering-cloud-gateway-api:latest
+    container_name: microservices-food-ordering-cloud-gateway-api
+    mem_limit: 700m
+    ports:
+      - 3691:3691
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
+    depends_on:
+      - zipkin
+      - keycloak
+      - microservices-food-ordering-configuration-server
+      - microservices-food-ordering-eureka-server
+      - microservices-food-ordering-restaurant-service
+      - microservices-food-ordering-payment-service
+      - microservices-food-ordering-order-service
+      - microservices-food-ordering-inventory-service
+    environment:
+      SPRING_APPLICATION_NAME: microservices-banking-cloud-gateway-api-project
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: optional:configserver:http://microservices-food-ordering-configuration-server:9966/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://microservices-food-ordering-eureka-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+networks:
+  food-ordering-network:

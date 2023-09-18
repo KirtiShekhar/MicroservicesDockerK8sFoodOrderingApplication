@@ -1,0 +1,85 @@
+package com.microservices.food.ordering.inventory.service.projects.mapper;
+
+import com.microservices.food.ordering.inventory.service.projects.dto.InventoryItemFootPrintRequest;
+import com.microservices.food.ordering.inventory.service.projects.dto.InventoryItemFootPrintResponse;
+import com.microservices.food.ordering.inventory.service.projects.dto.InventoryItemRequest;
+import com.microservices.food.ordering.inventory.service.projects.dto.InventoryItemResponse;
+import com.microservices.food.ordering.inventory.service.projects.dto.InventoryUnitOfMeasureRequest;
+import com.microservices.food.ordering.inventory.service.projects.dto.InventoryUnitOfMeasureResponse;
+import com.microservices.food.ordering.inventory.service.projects.entity.InventoryItem;
+import com.microservices.food.ordering.inventory.service.projects.entity.InventoryItemFootPrint;
+import com.microservices.food.ordering.inventory.service.projects.entity.InventoryUnitOfMeasure;
+
+public class InventoryFootprintUomMapper 
+{
+	public static InventoryUnitOfMeasure mapInventoryUnitOfMeasureRequestToInventoryUnitOfMeasure(InventoryUnitOfMeasureRequest inventoryUnitOfMeasureRequest)
+	{
+		InventoryUnitOfMeasure inventoryUnitOfMeasure = new InventoryUnitOfMeasure();
+		inventoryUnitOfMeasure.setInventoryFoodItemFootprintId(inventoryUnitOfMeasureRequest.getInventoryFoodItemFootprintId());
+		inventoryUnitOfMeasure.setInventoryFoodItemUnitOfMeasureLevel(inventoryUnitOfMeasureRequest.getInventoryFoodItemUnitOfMeasureLevel());
+		inventoryUnitOfMeasure.setInventoryFoodItemUnitOfMeasureName(inventoryUnitOfMeasureRequest.getInventoryFoodItemUnitOfMeasureName());
+		inventoryUnitOfMeasure.setInventoryFoodItemUnitOfMeasureQuantity(inventoryUnitOfMeasureRequest.getInventoryFoodItemUnitOfMeasureQuantity());
+		inventoryUnitOfMeasure.setInventoryFoodItemUnitOfMeasureNetWeight(inventoryUnitOfMeasureRequest.getInventoryFoodItemUnitOfMeasureNetWeight());
+		inventoryUnitOfMeasure.setInventoryFoodItemUnitOfMeasureGrossWeight(inventoryUnitOfMeasureRequest.getInventoryFoodItemUnitOfMeasureGrossWeight());
+		inventoryUnitOfMeasure.setInventoryFoodItemUnitOfMeasureDimensionsInInches(inventoryUnitOfMeasureRequest.getInventoryFoodItemUnitOfMeasureDimensionsInInches());
+		return inventoryUnitOfMeasure;
+	}
+	
+	public static InventoryUnitOfMeasureResponse mapInventoryUnitOfMeasureToInventoryUnitOfMeasureResponse(InventoryUnitOfMeasure inventoryUnitOfMeasure)
+	{
+		InventoryUnitOfMeasureResponse inventoryUnitOfMeasureResponse = new InventoryUnitOfMeasureResponse();
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemUnitOfMeasureId(inventoryUnitOfMeasure.getInventoryFoodItemUnitOfMeasureId());
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemFootprintId(inventoryUnitOfMeasure.getInventoryFoodItemFootprintId());
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemUnitOfMeasureLevel(inventoryUnitOfMeasure.getInventoryFoodItemUnitOfMeasureLevel());
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemUnitOfMeasureName(inventoryUnitOfMeasure.getInventoryFoodItemUnitOfMeasureName());
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemUnitOfMeasureQuantity(inventoryUnitOfMeasure.getInventoryFoodItemUnitOfMeasureQuantity());
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemUnitOfMeasureNetWeight(inventoryUnitOfMeasure.getInventoryFoodItemUnitOfMeasureNetWeight());
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemUnitOfMeasureGrossWeight(inventoryUnitOfMeasure.getInventoryFoodItemUnitOfMeasureGrossWeight());
+		inventoryUnitOfMeasureResponse.setInventoryFoodItemUnitOfMeasureDimensionsInInches(inventoryUnitOfMeasure.getInventoryFoodItemUnitOfMeasureDimensionsInInches());
+		return inventoryUnitOfMeasureResponse;
+	}
+	
+	public static InventoryItemFootPrint mapInventoryItemFootPrintRequestToInventoryItemFootPrint(InventoryItemFootPrintRequest inventoryItemFootPrintRequest)
+	{
+		InventoryItemFootPrint inventoryItemFootPrint = new InventoryItemFootPrint();
+		inventoryItemFootPrint.setInventoryFoodItemFootprintName(inventoryItemFootPrintRequest.getInventoryFoodItemFootprintName());
+		inventoryItemFootPrint.setInventoryFoodItemFootprintDescription(inventoryItemFootPrintRequest.getInventoryFoodItemFootprintDescription());
+		inventoryItemFootPrint.setInventoryFoodItemFootprintReceivingUOM(inventoryItemFootPrintRequest.getInventoryFoodItemFootprintReceivingUOM());
+		inventoryItemFootPrint.setInventoryFoodItemUnitOfMeasure(mapInventoryUnitOfMeasureRequestToInventoryUnitOfMeasure(inventoryItemFootPrintRequest.getInventoryUnitOfMeasureRequest()));
+		return inventoryItemFootPrint;
+	}
+	
+	public static InventoryItemFootPrintResponse mapInventoryItemFootPrintToInventoryItemFootPrintResponse(InventoryItemFootPrint inventoryItemFootPrint)
+	{
+		InventoryItemFootPrintResponse inventoryItemFootPrintResponse = new InventoryItemFootPrintResponse();
+		inventoryItemFootPrintResponse.setInventoryFoodItemFootprintId(inventoryItemFootPrint.getInventoryFoodItemFootprintId());
+		inventoryItemFootPrintResponse.setInventoryFoodItemFootprintName(inventoryItemFootPrint.getInventoryFoodItemFootprintName());
+		inventoryItemFootPrintResponse.setInventoryFoodItemFootprintDescription(inventoryItemFootPrint.getInventoryFoodItemFootprintDescription());
+		inventoryItemFootPrintResponse.setInventoryFoodItemFootprintReceivingUOM(inventoryItemFootPrint.getInventoryFoodItemFootprintReceivingUOM());
+		inventoryItemFootPrintResponse.setInventoryUnitOfMeasureResponse(mapInventoryUnitOfMeasureToInventoryUnitOfMeasureResponse(inventoryItemFootPrint.getInventoryFoodItemUnitOfMeasure()));
+		return inventoryItemFootPrintResponse;
+	}
+	
+	public static InventoryItem mapInventoryItemRequestToInventoryItem(InventoryItemRequest inventoryItemRequest)
+	{
+		InventoryItem inventoryItem = new InventoryItem();
+		inventoryItem.setInventoryFoodItemLpnNumber(inventoryItemRequest.getInventoryFoodItemLpnNumber());
+		inventoryItem.setInventoryFoodItemName(inventoryItemRequest.getInventoryFoodItemLpnNumber());
+		inventoryItem.setInventoryFoodItemDescription(inventoryItemRequest.getInventoryFoodItemLpnNumber());
+		inventoryItem.setInventoryFoodItemCategory(inventoryItemRequest.getInventoryFoodItemLpnNumber());
+		inventoryItem.setInventoryFoodItemFootprint(mapInventoryItemFootPrintRequestToInventoryItemFootPrint(inventoryItemRequest.getInventoryFoodItemFootprintRequest()));
+		return inventoryItem;
+	}
+	
+	public static InventoryItemResponse mapInventoryItemToInventoryItemResponse(InventoryItem inventoryItem)
+	{
+		InventoryItemResponse inventoryItemResponse = new InventoryItemResponse();
+		inventoryItemResponse.setInventoryFoodItemId(inventoryItem.getInventoryFoodItemId());
+		inventoryItemResponse.setInventoryFoodItemLpnNumber(inventoryItem.getInventoryFoodItemLpnNumber());
+		inventoryItemResponse.setInventoryFoodItemName(inventoryItem.getInventoryFoodItemLpnNumber());
+		inventoryItemResponse.setInventoryFoodItemDescription(inventoryItem.getInventoryFoodItemLpnNumber());
+		inventoryItemResponse.setInventoryFoodItemCategory(inventoryItem.getInventoryFoodItemLpnNumber());
+		inventoryItemResponse.setInventoryFoodItemFootprintResponse(mapInventoryItemFootPrintToInventoryItemFootPrintResponse(inventoryItem.getInventoryFoodItemFootprint()));
+		return inventoryItemResponse;
+	}
+}

@@ -1,0 +1,149 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-server-configmap
+  labels:
+    app: config-import-map
+data:
+  SPRING_CONFIG_IMPORT: "configserver:http://config-server-service:9966/"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eureka-service-registry-configmap
+  labels:
+    app: config-map
+data:
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-service-registry-0.eureka-service-registry:8761/eureka-service-registry"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-configmap
+  labels:
+    app: config-map
+data:
+  HOSTNAME: "mysql-0.mysql"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-configmap
+  labels:
+    app: config-map
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXIST food_ordering_inventory_item;
+    CREATE DATABASE IF NOT EXIST food_ordering_inventory_item_footprint;
+    CREATE DATABASE IF NOT EXIST food_ordering_inventory_unit_of_measure;
+    CREATE DATABASE IF NOT EXIST food_ordering_user_information;
+    CREATE DATABASE IF NOT EXIST food_ordering_orders_service;
+    CREATE DATABASE IF NOT EXIST food_ordering_order_line_items;
+    CREATE DATABASE IF NOT EXIST food_ordering_address_information;
+    CREATE DATABASE IF NOT EXIST food_ordering_payment_service;
+    CREATE DATABASE IF NOT EXIST food_ordering_credit_card_deatls;
+    CREATE DATABASE IF NOT EXIST food_ordering_restaurant_service;
+    CREATE DATABASE IF NOT EXIST food_ordering_food_menu_items;
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zipkin-tracing-endpoint-configmap
+  labels:
+    app: config-map
+data:
+  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin-service:9411/api/v2/spans
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-profile-active-configmap
+  labels:
+    app: config-map
+data:
+  SPRING_PROFILE_ACTIVE: default
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-config-profile-active-configmap
+  labels:
+    app: config-map
+data:
+  SPRING_CONFIG_PROFILE_ACTIVE: git
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eureka-server-application-name-configmap
+  labels:
+    app: config-map
+data:
+  EUREKA_SERVER_APPLICATION_NAME: microservices-food-ordering-eureka-server-project
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configuration-server-application-name-configmap
+  labels:
+    app: config-map
+data:
+  CONFIGURATION_SERVER_APPLICATION_NAME: microservices-food-ordering-configuration-server-project
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restaurant-service-application-name-configmap
+  labels:
+    app: config-map
+data:
+  RESTAURANT_SERVICE_APPLICATION_NAME: microservices-food-ordering-restaurant-service-project
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-service-application-name-configmap
+  labels:
+    app: config-map
+data:
+  PAYMENT_SERVICE_APPLICATION_NAME: microservices-food-ordering-payment-service-project
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-service-application-name-configmap
+  labels:
+    app: config-map
+data:
+  ORDER_SERVICE_APPLICATION_NAME: microservices-food-ordering-order-service-projects
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-service-application-name-configmap
+  labels:
+    app: config-map
+data:
+  INVENTORY_SERVICE_APPLICATION_NAME: microservices-food-ordering-inventory-service-projects
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloud-gateway-api-application-name-configmap
+  labels:
+    app: config-map
+data:
+  CLOUD_GATEWAY_API_APPLICATION_NAME: microservices-banking-cloud-gateway-api-project

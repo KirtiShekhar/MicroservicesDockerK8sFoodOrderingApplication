@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eureka-service-registry
+spec:
+  selector:
+    matchLabels:
+      app: eureka-service-registry
+  serviceName: "eureka"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: eureka-service-registry
+    spec:
+      containers:
+        - name: microservices-food-ordering-eureka-server
+          image: kirtishekharpandey/microservices-food-ordering-eureka-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8761
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-service-registry
+spec:
+  clusterIP: none
+  selector:
+    app: eureka-service-registry
+  ports:
+    - port: 8761
+      name: eureka-service-registry
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-service-registry-lb
+spec:
+  type: NodePort
+  selector:
+    app: eureka-service-registry
+  ports:
+    - port: 90
+      targetPort: 8761
